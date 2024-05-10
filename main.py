@@ -26,18 +26,74 @@ class Admin(User):
     def add_user(self, user):
         if not any(u.get_user_id() == user.get_user_id() for u in self.__users):
             self.__users.append(user)
-            print(f"Работник {user.get_name()} добавлен.")
+            print(f"Пользователь {user.get_name()} добавлен.")
         else:
-            print("Работник с таким идентификатором уже существует.")
+            print("Пользователь с таким идентификатором уже существует.")
 
     def remove_user(self, user_id):
         user = next((u for u in self.__users if u.get_user_id() == user_id), None)
         if user:
             self.__users.remove(user)
-            print(f"Работник {user.get_name()} удален из списка.")
+            print(f"Пользователь {user.get_name()} удален из списка.")
         else:
-            print("Работника с таким идентификатором не существует.")
+            print("Пользователя с таким идентификатором не существует.")
 
     def list_users(self):
         for user in self.__users:
-            print(f"ID: {user.get_user_id()}, Name: {user.get_name()}, Access Level: {user.get_access_level()}")
+            print(f"Идентификатор: {user.get_user_id()}, Имя: {user.get_name()}, Уровень доступа: {user.get_access_level()}")
+
+# Создаем администратора
+admin = Admin("001", "Алексей")
+
+# Создаем пользователей
+user1 = User("002", "Василий")
+user2 = User("003", "Светлана")
+
+# Добавляем пользователей через администратора
+admin.add_user(user1)
+admin.add_user(user2)
+
+# Выводим список всех пользователей
+print("Список всех пользователей:")
+admin.list_users()
+
+# Удаляем пользователя
+admin.remove_user("002")
+
+# Выводим список
+print("Список всех пользователей:")
+admin.list_users()
+
+
+#Проверка того,что атрибуты классов защищены от прямого доступа и модификации снаружи.
+
+user = User("005", "Михаил")
+admin1 = Admin("006", "Николай")
+
+# Попытка доступа к приватным атрибутам !!!
+try:
+    print(user.__name)
+except AttributeError as e:
+    print(f"Доступ запрещен: {e}")
+
+try:
+    print(admin1.__access_level)
+except AttributeError as e:
+    print(f"Доступ запрещен: {e}")
+
+
+# Проверка исходного значения имени
+print(user.get_name())  # Выведет "Михаил"
+print(admin1.get_name())  # Выведет "Михаил"
+
+# Попытка изменить приватный атрибут, на самом деле создает новый атрибут
+user.__name = "Эдуард"
+print(user.__name)  # Выведет "Эдуард"
+admin1.__name = "Эдуард"
+print(admin1.__name)  # Выведет "Эдуард"
+
+# Проверка значения приватного атрибута через метод
+print(user.get_name())  # Все еще выводит "Михаил", так как исходный атрибут не изменился
+print(admin1.get_name())  # Все еще выводит "Николай", так как исходный атрибут не изменился
+
+
