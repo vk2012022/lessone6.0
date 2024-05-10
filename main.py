@@ -24,19 +24,42 @@ class Admin(User):
         self.__users = []
 
     def add_user(self, user):
-        if not any(u.get_user_id() == user.get_user_id() for u in self.__users):
+        # Проверка существования пользователя с таким же ID
+        user_exists = False
+        for u in self.__users:
+            if u.get_user_id() == user.get_user_id():
+                user_exists = True
+                break
+
+        if not user_exists:
             self.__users.append(user)
             print(f"Пользователь {user.get_name()} добавлен.")
         else:
             print("Пользователь с таким идентификатором уже существует.")
+    #def add_user(self, user):
+    #    if not any(u.get_user_id() == user.get_user_id() for u in self.__users):
+    #        self.__users.append(user)
+    #        print(f"Пользователь {user.get_name()} добавлен.")
+    #    else:
+    #        print("Пользователь с таким идентификатором уже существует.")
 
     def remove_user(self, user_id):
-        user = next((u for u in self.__users if u.get_user_id() == user_id), None)
-        if user:
-            self.__users.remove(user)
-            print(f"Пользователь {user.get_name()} удален из списка.")
-        else:
+        found = False
+        for user in self.__users:
+            if user.get_user_id() == user_id:
+                self.__users.remove(user)
+                print(f"Пользователь {user.get_name()} удален из списка.")
+                found = True
+                break  # Выход из цикла после удаления пользователя
+        if not found:
             print("Пользователя с таким идентификатором не существует.")
+    #def remove_user(self, user_id):
+    #    user = next((u for u in self.__users if u.get_user_id() == user_id), None)
+    #    if user:
+    #        self.__users.remove(user)
+    #        print(f"Пользователь {user.get_name()} удален из списка.")
+    #    else:
+    #        print("Пользователя с таким идентификатором не существует.")
 
     def list_users(self):
         for user in self.__users:
@@ -95,5 +118,7 @@ print(admin1.__name)  # Выведет "Эдуард"
 # Проверка значения приватного атрибута через метод
 print(user.get_name())  # Все еще выводит "Михаил", так как исходный атрибут не изменился
 print(admin1.get_name())  # Все еще выводит "Николай", так как исходный атрибут не изменился
+user.set_name("Григорий")
+print(user.get_name())  # Выведет "Григорий"
 
 
