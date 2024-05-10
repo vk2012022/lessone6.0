@@ -42,7 +42,7 @@ class Admin(User):
         for user in self.__users:
             if user.get_user_id() == user_id:
                 self.__users.remove(user)
-                print(f"Пользователь {user.get_name()} удален из списка.")
+                print(f"Пользователь {user.get_name()} с идентификатором - {user.get_user_id()} удален из списка.")
                 found = True
                 break  # Выход из цикла после удаления пользователя
         if not found:
